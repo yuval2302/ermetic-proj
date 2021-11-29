@@ -7,13 +7,13 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
 public class ConcurrentHashMapWithTimer<T, M> implements MapWithTimer<T,M>{
-    @Inject
     private Vertx vertx;
     private ConcurrentHashMap<T, M> concurrentHashMap;
     private long timeout;
 
-    public ConcurrentHashMapWithTimer(long timeout) {
+    public ConcurrentHashMapWithTimer(Vertx vertx, long timeout) {
         this.concurrentHashMap = new ConcurrentHashMap<>();
+        this.vertx=vertx;
         this.timeout = timeout;
     }
 

@@ -36,24 +36,23 @@ public class HttpServerImpl implements HttpServer {
     }
 
     private void setServerRoutes() {
-        router.post().handler(BodyHandler.create());
+        router.get().handler(BodyHandler.create());
 
         router.get(Url).handler(routingContext -> {
+            logger.info("got an http request");
             vertx.executeBlocking(promise -> {
-                String clientId = routingContext.getBodyAsJson().getString("clientId");
-                httpRequestHandler.handleClientRequest(clientId)
-                        .onSuccess(event -> promise.complete())
-                        .onFailure(promise::fail)
-                ;
-            }).onSuccess(unused -> {
-                handleHttpResponse(routingContext, "", 200);
-            }).onFailure(throwable -> {
-                if(throwable instanceof DosException) {
-                    handleHttpResponse(routingContext, throwable.getMessage(), HttpResponseStatus.SERVICE_UNAVAILABLE.code());
-                } else {
-                    handleHttpResponse(routingContext, throwable.getMessage(), HttpResponseStatus.INTERNAL_SERVER_ERROR.code());
-                }
-            });
+                        String clientId = routingContext.request().params().get("clientId");
+                        httpRequestHandler.handleClientRequest(clientId)
+                                .onSuccess(event -> promise.complete())
+                                .onFailure(promise::fail);
+                    }).onSuccess(unused -> handleHttpResponse(routingContext, "", 200))
+                    .onFailure(throwable -> {
+                        if (throwable instanceof DosException) {
+                            handleHttpResponse(routingContext, throwable.getMessage(), HttpResponseStatus.SERVICE_UNAVAILABLE.code());
+                        } else {
+                            handleHttpResponse(routingContext, throwable.getMessage(), HttpResponseStatus.INTERNAL_SERVER_ERROR.code());
+                        }
+                    });
         });
     }
 

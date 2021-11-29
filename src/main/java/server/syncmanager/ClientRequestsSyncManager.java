@@ -1,6 +1,7 @@
 package server.syncmanager;
 
 import com.google.inject.Inject;
+import io.vertx.core.Vertx;
 import io.vertx.core.impl.logging.Logger;
 import io.vertx.core.impl.logging.LoggerFactory;
 import server.models.ConcurrentHashMapWithTimer;
@@ -17,8 +18,8 @@ public class ClientRequestsSyncManager implements SyncManager<String> {
     private PropertiesProvider propertiesProvider;
 
     @Inject
-    public ClientRequestsSyncManager(PropertiesProvider propertiesProvider) {
-        this.map = new ConcurrentHashMapWithTimer<>(propertiesProvider.getRequestsFrameTime());
+    public ClientRequestsSyncManager(Vertx vertx, PropertiesProvider propertiesProvider) {
+        this.map = new ConcurrentHashMapWithTimer<>(vertx, propertiesProvider.getRequestsFrameTime());
         this.propertiesProvider = propertiesProvider;
     }
 

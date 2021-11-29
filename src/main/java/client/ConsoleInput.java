@@ -5,27 +5,27 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class ConsoleInput {
-    public int getNumberOfClients() throws IOException {
+    public int getNumberOfClients() {
         int numOfClients=0;
         do {
             System.out.println("please enter a valid number of httpclient instances desired.");
             BufferedReader reader = new BufferedReader(
                     new InputStreamReader(System.in));
-            String valueFromUser = reader.readLine();
             try {
+                String valueFromUser = reader.readLine();
                 numOfClients = Integer.parseInt(valueFromUser);
-            } catch (NumberFormatException e) {
-                System.out.println("Worng input [" + valueFromUser + "] please try again.");
+            } catch (Exception ex) {
+                System.out.println("Wrong input please try again.");
             }
         } while (numOfClients<=0);
 
         return numOfClients;
     }
 
-    public waitForAnyUserKey() {
+    public void waitForAnyUserKey() throws IOException{
+        System.out.println("Waiting For key to terminate");
         BufferedReader reader = new BufferedReader(
                 new InputStreamReader(System.in));
         String valueFromUser = reader.readLine();
-
     }
 }
