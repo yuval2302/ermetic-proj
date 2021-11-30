@@ -1,8 +1,8 @@
 package server.models;
 
+import com.google.inject.Inject;
 import io.vertx.core.Vertx;
 
-import com.google.inject.Inject;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
@@ -20,12 +20,12 @@ public class ConcurrentHashMapWithTimer<T, M> implements MapWithTimer<T,M>{
     @Override
     public void put(T key, M value) {
             if(concurrentHashMap.get(key)==null) {
-                putTimerToKet(key);
+                putTimerToKey(key);
             }
             concurrentHashMap.put(key, value);
     }
 
-    private void putTimerToKet(T key) {
+    private void putTimerToKey(T key) {
         vertx.setTimer(timeout, (timerId) -> this.remove(key));
     }
 
@@ -41,12 +41,17 @@ public class ConcurrentHashMapWithTimer<T, M> implements MapWithTimer<T,M>{
 
     public M computeIfAbsent(T key, M defaultValue) {
         return concurrentHashMap.computeIfAbsent(key, putKey-> {
-            putTimerToKet(key);
+            putTimerToKey(key);
             return defaultValue;
         });
     }
 
     public M computeIfPresent(T key, Function<M,M> mapping) {
         return concurrentHashMap.computeIfPresent(key, (putKey, value)-> mapping.apply(value));
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return concurrentHashMap.isEmpty();
     }
 }

@@ -1,4 +1,4 @@
-package server.server;
+package server.utils;
 
 import com.google.inject.Inject;
 import io.vertx.core.CompositeFuture;

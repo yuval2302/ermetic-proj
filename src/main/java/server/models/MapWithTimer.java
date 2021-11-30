@@ -8,5 +8,6 @@ public interface MapWithTimer<T,M> {
     M remove(T key);
     M computeIfAbsent(T key, M defaultValue);
     M computeIfPresent(T key, Function<M,M> Mapping);
+    boolean isEmpty();
 
 }

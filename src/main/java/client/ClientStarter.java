@@ -3,9 +3,7 @@ package client;
 import client.utils.PropertiesProvider;
 import com.google.inject.Inject;
 
-import java.net.HttpURLConnection;
 import java.net.URI;
-import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -13,8 +11,6 @@ import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-
-import static io.vertx.ext.web.client.spi.CookieStore.build;
 
 public class ClientStarter {
     @Inject
@@ -30,7 +26,7 @@ public class ClientStarter {
         int numOfClients = consoleInput.getNumberOfClients();
         this.executorService = Executors.newFixedThreadPool(numOfClients);
         for(int i =0; i<numOfClients;i++) {
-            executorService.submit(() -> makeServerRequest(numOfClients));
+            executorService.execute(() -> makeServerRequest(numOfClients));
         }
         try {
             consoleInput.waitForAnyUserKey();
@@ -48,7 +44,7 @@ public class ClientStarter {
                 .header("accept", "application/json")
                 .build();
         try {
-            HttpResponse response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             System.out.println(response.statusCode());
         } catch (Exception e) {
             e.printStackTrace();

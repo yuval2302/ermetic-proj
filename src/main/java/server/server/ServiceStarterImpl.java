@@ -5,8 +5,8 @@ import io.vertx.core.Vertx;
 import com.google.inject.Inject;
 import io.vertx.core.impl.logging.Logger;
 import io.vertx.core.impl.logging.LoggerFactory;
+import server.utils.TerminateServer;
 
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class ServiceStarterImpl implements ServiceStarter {
@@ -15,7 +15,7 @@ public class ServiceStarterImpl implements ServiceStarter {
     @Inject
     private MainVerticle mainVerticle;
     @Inject
-            private TerminateServer terminateServer;
+    private TerminateServer terminateServer;
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
 

@@ -1,13 +1,12 @@
 package server.server;
 
+import com.google.inject.Inject;
+import io.vertx.core.AbstractVerticle;
+import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
 import io.vertx.core.impl.logging.Logger;
 import io.vertx.core.impl.logging.LoggerFactory;
 import server.server.httpserver.HttpServer;
-import io.vertx.core.AbstractVerticle;
-import io.vertx.core.Promise;
-
-import com.google.inject.Inject;
 
 public class MainVerticle extends AbstractVerticle {
     @Inject
@@ -20,14 +19,13 @@ public class MainVerticle extends AbstractVerticle {
     @Override
     public void start(Promise<Void> startPromise) throws Exception {
         httpServer.createHttpServer()
-                .onSuccess(result -> {
-                    startPromise.complete();
-                })
+                .onSuccess(result -> startPromise.complete())
                 .onFailure(throwable -> {
                     logger.error(throwable);
                     startPromise.fail(throwable);
                 });
     }
+
 
     @Override
     public void stop(Promise<Void> stopPromise) throws Exception {
